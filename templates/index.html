@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Article Summarizer</title>
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f4f4f4; 
+            color: #333;
+            line-height: 1.6;
+            margin: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 30px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px; 
+        }
+
+        h1 {
+            text-align: center;
+            color: #333; 
+        }
+
+        h2, h3 {
+            color: #333; 
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="url"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 3px; 
+            box-sizing: border-box; 
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 3px; 
+        }
+
+        button[type="submit"] {
+            background-color: #007bff; 
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px; 
+            cursor: pointer;
+            transition: background-color 0.3s ease; 
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3; 
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9; 
+            border-radius: 5px; 
+        }
+
+        ul {
+            list-style-type: none; 
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Article Summarizer</h1>
+        <form method="POST">
+            <label for="url">Enter article URL:</label>
+            <input type="url" name="url" id="url" required>
+            <br>
+            <label for="analysis_type">Analysis Type:</label>
+            <select name="analysis_type" id="analysis_type">
+                <option value="summary">Summarization</option>
+                <option value="ner">Named Entity Recognition</option>
+                <option value="sentiment">Sentiment Analysis</option>
+            </select>
+            <br>
+            <button type="submit">Analyze</button>
+        </form>
+
+        {% if show_summary %}
+            <div class="result-box"> 
+                <h2>{{ title }}</h2>
+                <h3>Original Article:</h3>
+                <p>{{ text }}</p>
+
+                <hr>
+
+                {% if analysis_type == "summary" %}
+                    <h3>Summary:</h3>
+                    <p>{{ summary }}</p>
+                {% elif analysis_type == "ner" %}
+                    <h3>Named Entities:</h3>
+                    <ul>
+                        {% for entity in ner_results %}
+                            <li>{{ entity['word'] }} - {{ entity['entity_group'] }}</li>
+                        {% endfor %}
+                    </ul>
+                {% elif analysis_type == "sentiment" %}
+                    <h3>Sentiment:</h3>
+                    <p>{{ sentiment_result['label'] }} (Score: {{ sentiment_result['score'] }})</p>
+                {% endif %}
+            </div> 
+        {% endif %}
+    </div>
+</body>
+</html>
